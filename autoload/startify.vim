@@ -110,7 +110,7 @@ function! startify#insane_in_the_membrane() abort
         \ [s:padding_left .'Sessions'],       'sessions',
         \ [s:padding_left .'Bookmarks'],      'bookmarks',
         \ [s:padding_left .'Commands'],       'commands',
-        \ [s:padding_left .'Projects'],       'Projects',
+        \ [s:padding_left .'Projects'],       'projects',
         \ ])
 
   for item in s:lists
