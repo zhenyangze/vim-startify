@@ -665,11 +665,14 @@ function! s:show_projects() abort
   endif
 
   if (len(g:startify_nerdtree_bookmark_file) > 0)
-    let s:nerdtree_bookmark_file = expand(g:startify_nerdtree_file, ':p')
+    let s:nerdtree_bookmark_file = expand(g:startify_nerdtree_bookmark_file, ':p')
     if (filereadable(s:nerdtree_bookmark_file))
       for file in readfile(s:nerdtree_bookmark_file)
-        let fileArr = split(file, " ")
-        call add(g:startify_projects, fileArr[1])
+        let s:fileArr = split(file, " ")
+        let s:fileIndex = len(s:fileArr) - 1
+        if (s:fileIndex >= 0)
+          call add(g:startify_projects, s:fileArr[s:fileIndex])
+        endif
       endfor
     endif
   endif
