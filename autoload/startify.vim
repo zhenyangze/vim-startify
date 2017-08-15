@@ -664,6 +664,16 @@ function! s:show_projects() abort
     call s:print_section_header()
   endif
 
+  if (len(g:startify_nerdtree_bookmark_file) > 0)
+    let s:nerdtree_bookmark_file = expand(g:startify_nerdtree_file, ':p')
+    if (filereadable(s:nerdtree_bookmark_file))
+      for file in readfile(s:nerdtree_bookmark_file)
+        let fileArr = split(file, " ")
+        call add(g:startify_projects, fileArr[1])
+      endfor
+    endif
+  endif
+
   for project in g:startify_projects
     if type(project) == type({})
       let [index, path] = items(project)[0]
