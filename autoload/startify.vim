@@ -657,14 +657,10 @@ endfunction
 " Function: s:show_projects {{{1
 function! s:show_projects() abort
   if !exists('g:startify_projects') || empty(g:startify_projects)
-    return
+    let g:startify_projects = []
   endif
 
-  if exists('s:last_message')
-    call s:print_section_header()
-  endif
-
-  if (len(g:startify_nerdtree_bookmark_file) > 0)
+  if !empty(g:startify_nerdtree_bookmark_file)
     let s:nerdtree_bookmark_file = expand(g:startify_nerdtree_bookmark_file, ':p')
     if (filereadable(s:nerdtree_bookmark_file))
       for file in readfile(s:nerdtree_bookmark_file)
@@ -675,6 +671,14 @@ function! s:show_projects() abort
         endif
       endfor
     endif
+  endif
+
+  if !exists('g:startify_projects') || empty(g:startify_projects)
+    return
+  endif
+
+  if exists('s:last_message')
+    call s:print_section_header()
   endif
 
   for project in g:startify_projects
@@ -693,7 +697,7 @@ function! s:show_projects() abort
       let entry_path = path
     endif
     let dirname = fnamemodify(entry_path, ":t")
-    call append('$', s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index))) . dirname  . ' | ' . entry_path)
+    call append('$', s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index))) . entry_path)
 
     if has('win32')
       let path = substitute(path, '\[', '\[[]', 'g')
