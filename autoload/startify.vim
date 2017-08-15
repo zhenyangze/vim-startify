@@ -110,6 +110,7 @@ function! startify#insane_in_the_membrane() abort
         \ [s:padding_left .'Sessions'],       'sessions',
         \ [s:padding_left .'Bookmarks'],      'bookmarks',
         \ [s:padding_left .'Commands'],       'commands',
+        \ [s:padding_left .'Projects'],       'Projects',
         \ ])
 
   for item in s:lists
@@ -652,6 +653,46 @@ function! s:show_bookmarks() abort
 
   call append('$', '')
 endfunction
+
+" Function: s:show_projects {{{1
+function! s:show_projects() abort
+  if !exists('g:startify_projects') || empty(g:startify_projects)
+    return
+  endif
+
+  if exists('s:last_message')
+    call s:print_section_header()
+  endif
+
+  for project in g:startify_projects
+    if type(project) == type({})
+      let [index, path] = items(project)[0]
+    else  " string
+      let [index, path] = [s:get_index_as_string(b:startify.entry_number), project]
+      let b:startify.entry_number += 1
+    endif
+
+    let entry_path = ''
+    if s:tf
+      let entry_path = s:transform(fnamemodify(resolve(expand(path)), ':p'))
+    endif
+    if empty(entry_path)
+      let entry_path = path
+    endif
+    let dirname = fnamemodify(entry_path, ":t")
+    call append('$', s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index))) . dirname  . ' | ' . entry_path)
+
+    if has('win32')
+      let path = substitute(path, '\[', '\[[]', 'g')
+    endif
+    call s:register(line('$'), index, 'file', 'cd', fnameescape(expand(path)))
+
+    unlet project  " avoid type mismatch for heterogeneous lists
+  endfor
+
+  call append('$', '')
+endfunction
+
 
 " Function: s:show_commands {{{1
 function! s:show_commands() abort
