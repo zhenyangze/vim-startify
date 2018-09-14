@@ -656,9 +656,7 @@ endfunction
 
 " Function: s:show_projects {{{1
 function! s:show_projects() abort
-  if !exists('g:startify_projects') || empty(g:startify_projects)
-    let g:startify_projects = []
-  endif
+  let g:startify_projects = []
 
   if !empty(g:startify_nerdtree_bookmark_file)
     let s:nerdtree_bookmark_file = expand(g:startify_nerdtree_bookmark_file, ':p')
